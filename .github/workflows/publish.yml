@@ -1,0 +1,26 @@
+name: publish-release-assets
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'files/**' ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Upload zip files
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload 1404 files/*.zip --clobber --repo ${{ github.repository }}
+
+      - name: Upload version.txt
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload 1404 files/version.txt --clobber --repo ${{ github.repository }}
